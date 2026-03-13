@@ -13,6 +13,8 @@ services:
             - projet_fil_rouge_data:/var/lib/postgresql/data
             # Scripts d'initialisation (schéma + données)
             - ./initdb:/docker-entrypoint-initdb.d
+            # Import COPY via Docker
+            - ./data:/data
         restart: unless-stopped
 
 volumes:
