@@ -1,25 +1,50 @@
 -------------- TABLES DE REFERENCE --------------
+CREATE TABLE type_mobilier(
+    id SERIAL PRIMARY KEY,
+    libelle VARCHAR(100)
+)
+
+CREATE TABLE type_materiel(
+    id SERIAL PRIMARY KEY,
+    libelle VARCHAR(100)
+)
+
+CREATE TABLE type_interv(
+    id SERIAL PRIMARY KEY,
+    libelle VARCHAR(100)
+)
+
+CREATE TABLE signal_urgence(
+    id SERIAL PRIMARY KEY,
+    libelle VARCHAR(50)
+)
+
+CREATE TABLE signal_statut(
+    id SERIAL PRIMARY KEY,
+    libelle VARCHAR(50)
+)
+
+-------------- TABLES SERVTECH --------------
 
 CREATE TABLE fournisseur (
     id SERIAL PRIMARY KEY,
     entreprise VARCHAR(80) NOT NULL UNIQUE
-    contact
-    telephone
-    email
-    type_materiel
-    remarques
+    contact VARCHAR(80) NOT NULL UNIQUE
+    telephone INTEGER NOT NULL UNIQUE
+    email VARCHAR (80)NOT NULL UNIQUE
+    remarques VARCHAR (255)
+    # FK ID à mettre
 );
 
 CREATE TABLE interventions (
     SERIAL PRIMARY KEY,
-    type VARCHAR(80) NOT NULL UNIQUE
-    date 
+    date_intervention DATE NOT NULL
     objet
-    type_intervention
     technicien
     duree
     materiel
     remarques
+    # FK ID à mettre
 );
 
 CREATE TABLE inventaire (
