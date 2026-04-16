@@ -42,8 +42,7 @@ CREATE TABLE fournisseur (
     contact VARCHAR(80) NOT NULL UNIQUE,
     telephone INTEGER NOT NULL UNIQUE,
     email VARCHAR(80) NOT NULL UNIQUE,
-    remarques VARCHAR(255),
-    id_type_materiel INTEGER NOT NULL REFERENCES type_materiel(id)
+    remarques VARCHAR(255)
 );
 
 CREATE TABLE inventaire (
@@ -94,4 +93,10 @@ CREATE TABLE signal_invent (
     id SERIAL PRIMARY KEY,
     id_signalement INTEGER NOT NULL REFERENCES signalement(id),
     id_inventaire INTEGER NOT NULL REFERENCES inventaire(id)
+);
+
+CREATE TABLE fournisseur_materiel(
+    id SERIAL PRIMARY KEY,
+    id_fournisseurs INTEGER NOT NULL REFERENCES fournisseur(id),
+    id_type_materiel INTEGER NOT NULL REFERENCES type_materiel(id)
 );

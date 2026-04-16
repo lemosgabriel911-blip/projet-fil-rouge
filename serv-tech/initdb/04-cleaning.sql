@@ -1,0 +1,4 @@
+CREATE EXTENSION IF NOT EXISTS unaccent;
+
+SELECT DISTINCT
+FROM staging.fournisseur
