@@ -76,3 +76,20 @@ SELECT DISTINCT (
      END ) AS type_interv_nettoye
 FROM staging.interventions;
 -- Nettoyage intervention type
+
+INSERT INTO type_materiel (libelle)
+SELECT DISTINCT
+    CASE
+        WHEN LOWER(TRIM(materiel_value)) LIKE '%bancs%' THEN 'bancs'
+        WHEN LOWER(TRIM(unaccent(materiel_value))) LIKE '%metal%' THEN 'metal'
+        WHEN LOWER(TRIM(unaccent(materiel_value))) LIKE '%plastique%' THEN 'plastique'
+        WHEN LOWER(TRIM(unaccent(materiel_value))) LIKE '%sodium%' THEN 'sodium'
+        WHEN LOWER(TRIM(unaccent(materiel_value))) LIKE '%led%' THEN 'led'
+        WHEN LOWER(TRIM(unaccent(materiel_value))) LIKE '%pierre%' THEN 'pierre'
+        WHEN LOWER(TRIM(unaccent(materiel_value))) LIKE '%beton%' THEN 'beton'
+        ELSE 'non spécifié'
+    END AS libelle
+FROM staging.fournisseurs,
+     UNNEST(regexp_split_to_array(materiel, ', *')) AS materiel_value
+WHERE materiel IS NOT NULL;
+-- A FAIRE nettoyage, éclatement et liaison fournisseur materiel
