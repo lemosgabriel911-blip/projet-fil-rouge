@@ -39,9 +39,9 @@ CREATE TABLE etat_inventaire(
 CREATE TABLE fournisseur (
     id SERIAL PRIMARY KEY,
     entreprise VARCHAR(80) NOT NULL UNIQUE,
-    contact VARCHAR(80) NOT NULL UNIQUE,
-    telephone INTEGER NOT NULL UNIQUE,
-    email VARCHAR(80) NOT NULL UNIQUE,
+    contact VARCHAR(80) NOT NULL,
+    telephone BIGINT NOT NULL UNIQUE,
+    email VARCHAR(80) NOT NULL,
     remarques VARCHAR(255)
 );
 
@@ -55,7 +55,7 @@ CREATE TABLE inventaire (
     id_type_mobilier INTEGER NOT NULL REFERENCES type_mobilier(id),
     id_type_materiau INTEGER NOT NULL REFERENCES type_materiau(id),
     id_etat_inventaire INTEGER NOT NULL REFERENCES etat_inventaire(id),
-    id_fournisseur INTEGER NOT NULL REFERENCES fournisseur(id)
+    id_fournisseur INTEGER REFERENCES fournisseur(id)
 );
 
 
@@ -68,7 +68,7 @@ CREATE TABLE interventions (
     cout_materiel INTEGER NOT NULL,
     remarques VARCHAR(255),
     id_type_interv INTEGER NOT NULL REFERENCES type_interv(id),
-    id_inventaire INTEGER NOT NULL REFERENCES inventaire(id)
+    id_inventaire INTEGER REFERENCES inventaire(id)
 );
 
 CREATE TABLE signalement (
@@ -76,7 +76,7 @@ CREATE TABLE signalement (
     date_signalement DATE NOT NULL,
     signale_par VARCHAR(80),
     objet VARCHAR (190),
-    description VARCHAR(80) NOT NULL,
+    description VARCHAR(80),
     id_signal_urgence INTEGER NOT NULL REFERENCES signal_urgence(id),
     id_signal_statut INTEGER NOT NULL REFERENCES signal_statut(id)
 );
