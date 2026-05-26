@@ -42,3 +42,48 @@ JOIN public.fournisseur_materiel fm ON fm.id_type_materiel = tm.id
 WHERE inv.id_type_mobilier = tmob.id
 AND inv.id_fournisseur IS NULL;
 --CORRECTION ID FOURNISSEUR DANS INVENTAIRE
+
+-- CRÉATION DES RÔLES
+
+CREATE ROLE administrateur;
+CREATE ROLE technicien;
+CREATE ROLE citoyen;
+
+-- ADMINISTRATEUR : tous les droits
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO administrateur;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO administrateur;
+GRANT ALL PRIVILEGES ON SCHEMA public TO administrateur;
+
+-- TECHNICIEN : lecture + écriture sur ses tables
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON public.inventaire, public.signalement, public.interventions,
+   public.signal_invent, public.interv_signal
+TO technicien;
+
+-- Accès en lecture seule aux tables de référence (nécessaires pour les JOINs)
+GRANT SELECT
+ON public.type_mobilier, public.type_materiau, public.etat_inventaire,
+   public.type_interv, public.signal_urgence, public.signal_statut,
+   public.type_materiel, public.fournisseur, public.fournisseur_materiel
+TO technicien;
+
+-- Accès aux séquences pour les INSERT
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO technicien;
+
+-- CITOYEN : lecture restreinte par colonnes
+-- inventaire : toutes les colonnes (pas de restriction)
+GRANT SELECT ON public.inventaire TO citoyen;
+
+-- interventions : toutes les colonnes SAUF technicien
+GRANT SELECT (
+   id, date_intervention, objet, duree,
+   cout_materiel, remarques, id_type_interv, id_inventaire
+) ON public.interventions TO citoyen;
+
+-- signalement : toutes les colonnes SAUF signale_par
+GRANT SELECT (
+   id, date_signalement, objet, description,
+   id_signal_urgence, id_signal_statut
+) ON public.signalement TO citoyen;
