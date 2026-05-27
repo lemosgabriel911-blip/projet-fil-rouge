@@ -87,3 +87,24 @@ GRANT SELECT (
    id, date_signalement, objet, description,
    id_signal_urgence, id_signal_statut
 ) ON public.signalement TO citoyen;
+
+CREATE OR REPLACE VIEW vue_inventaire_synthese AS
+SELECT
+   tm.libelle    AS type_mobilier,
+   tma.libelle   AS type_materiau,
+   ei.libelle    AS etat_inventaire,
+   COUNT(inv.id) AS total
+FROM public.inventaire inv
+JOIN public.type_mobilier   tm  ON tm.id  = inv.id_type_mobilier
+JOIN public.type_materiau   tma ON tma.id = inv.id_type_materiau
+JOIN public.etat_inventaire ei  ON ei.id  = inv.id_etat_inventaire
+GROUP BY
+   tm.libelle,
+   tma.libelle,
+   ei.libelle
+ORDER BY
+   tm.libelle,
+   tma.libelle,
+   ei.libelle;
+-- Vue synthétique mobilier : type, matériau, état et total
+
