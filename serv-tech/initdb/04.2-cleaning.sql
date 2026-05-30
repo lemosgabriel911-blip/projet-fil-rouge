@@ -10,7 +10,7 @@ FROM public.fournisseur_materiel fm
 JOIN public.fournisseur f ON f.id = fm.id_fournisseurs
 JOIN public.type_materiel tm ON tm.id = fm.id_type_materiel
 ORDER BY f.entreprise, tm.libelle;
--- VISUALISATION DANS "VIEWS" DE CHAQUE ENTREPRISE AVEC LE MATERIEL FOURNI LIGNE PAR LIGNE
+-- VISUALISATION DANS "VIEWS" DE CHAQUE ENTREPRISE AVEC LE MATERIEL FOURNI LIGNE PAR LIGNE (Aide IA)
 
 UPDATE public.interventions iv
 SET id_inventaire = si.id_inventaire
@@ -106,5 +106,27 @@ ORDER BY
    tm.libelle,
    tma.libelle,
    ei.libelle;
--- Vue synthétique mobilier : type, matériau, état et total
+-- Vue synthétique mobilier : type, matériau, état et total (Aide IA)
 
+CREATE OR REPLACE VIEW vue_duree_par_type_interv AS
+SELECT
+    ti.libelle                              AS type_interv,
+    COUNT(i.id)                             AS nb_interventions,
+    AVG(
+        CASE
+            WHEN i.duree = '00:30:00' THEN 0.5
+            WHEN i.duree = '01:00:00' THEN 1.0
+            WHEN i.duree = '01:30:00' THEN 1.5
+            WHEN i.duree = '02:00:00' THEN 2.0
+            WHEN i.duree = '03:00:00' THEN 3.0
+            ELSE EXTRACT(EPOCH FROM i.duree) / 3600.0
+        END
+    )::NUMERIC(4,2)                         AS duree_moy_h,
+    SUM(
+        EXTRACT(EPOCH FROM i.duree) / 3600.0
+    )::NUMERIC(6,2)                         AS duree_tot_h
+FROM public.interventions i
+JOIN public.type_interv ti ON ti.id = i.id_type_interv
+GROUP BY ti.libelle
+ORDER BY duree_moy_h DESC;
+-- Vue du temps par type_interv (Aide IA)

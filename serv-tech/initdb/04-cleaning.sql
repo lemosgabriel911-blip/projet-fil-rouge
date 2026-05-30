@@ -390,6 +390,8 @@ WHERE
 
 -----------------TABLES DE LIAISON-------------------------------
 
+-- (Pour certaines liaisons nous avons utilisé l'aide de l'IA)
+
 INSERT INTO
     public.fournisseur_materiel (
         id_fournisseurs,
